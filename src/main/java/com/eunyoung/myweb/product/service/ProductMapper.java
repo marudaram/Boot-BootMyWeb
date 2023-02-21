@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.eunyoung.myweb.command.CategoryVO;
+import com.eunyoung.myweb.command.ProductUploadVO;
 import com.eunyoung.myweb.command.ProductVO;
 import com.eunyoung.myweb.util.Criteria;
 
@@ -14,6 +15,8 @@ import com.eunyoung.myweb.util.Criteria;
 public interface ProductMapper {
 
 	public int regist(ProductVO vo);
+	public int registFile(ProductUploadVO vo);
+	
 	//매개변수로 전달되는 데이터가 2개 이상이면 이름붙이기
 	public ArrayList<ProductVO> getList(@Param("user_id") String user_id, 
 										@Param ("cri") Criteria cri); //조회: 특정회원

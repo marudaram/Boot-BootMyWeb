@@ -2,6 +2,8 @@ package com.eunyoung.myweb.controller;
 
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -13,7 +15,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.eunyoung.myweb.command.ProductVO;
@@ -78,9 +82,25 @@ public class ProductController {
 	//등록요청
 	@PostMapping("/registForm")
 	public String registForm(ProductVO vo, //@Valid -> 유효성 검사 여기선 생략
-							 RedirectAttributes ra) { 
+							 RedirectAttributes ra,
+							 @RequestParam("file") List<MultipartFile> list) { 
 		
-		int result = productService.regist(vo);
+		
+		//리스트에서 빈값 제거하기
+		list = list.stream().filter( (x) -> x.isEmpty() == false ).collect(Collectors.toList());
+		
+		//확장자가 image라면 경고문 
+		for(MultipartFile file : list) {
+			
+			if(file.getContentType().contains("image") == false) {
+				ra.addFlashAttribute("msg", "png, jpg, jpeg형식만 등록 가능합니다");
+				return "redirect:/product/productReg";
+			}
+		}
+		
+		//파일 업로드 작업 -> service 영역으로 위임
+		//글 등록
+		int result = productService.regist(vo, list);
 		
 		String msg = result == 1 ? "정상 입력되었습니다" : "등록에 실패했습니다";
 		ra.addFlashAttribute("msg", msg);
