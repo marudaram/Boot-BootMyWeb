@@ -110,13 +110,12 @@
 												<td>[[${status.count}]]</td>
 												<td>
 													<a href="#" class="normal_btn">정보수정</a>
+													<!-- 1. modalOn클래스가 들어가면 모달창이 열림, 2. modalOn()으로 켤 수 있음 -->
 													<a href="#" class="normal_btn modalOn">이미지수정</a>													
 												</td>
 												<td>[[${vo.prod_id}]]</td>
 												<td>[[${vo.category_nav == null ? '없음' : vo.category_nav}]]</td>
 												
-												
-												<td>.....</td>
 
 												<td>
 													<a title="상세보기(클릭)" th:href="@{productDetail(prod_id= ${vo.prod_id})}">
@@ -281,6 +280,8 @@
 						<!--미리보기 폼-->
 						<div class="filebox preview-image">
 							<!--1 -->
+							
+							<!-- 
 							<div class="left">
 									<span>추가이미지</span>
 									<label class="upload-display" for="a_file">
@@ -295,6 +296,8 @@
 									<button type="button" class="normal_btn" style="display: block;">삭제</button>
 									
 							</div>
+							
+							
 							<div class="left">
 									<span>추가이미지</span>
 									<label class="upload-display" for="b_file">
@@ -325,6 +328,8 @@
 					</div>
 					</div>
 				</div>
+				
+				 -->
 	
 
 				<div class="btn_area">
@@ -358,4 +363,59 @@
 	}
 	
 	
+</script>
+
+<script src="/js/modal.js"></script>
+<script>
+	//이미지 수정버튼을 클릭했을 때 modalOn();
+	$(".modalOn").click(function(e) {
+		e.preventDefault(); //a링크의 고유이벤트 중지
+		
+		//1. 클릭한 대상의 prod_id값
+		var prod_id = $(e.target).closest("td").next().html();
+		//console.log(prod_id);
+		
+		//2. post방식으로 img데이터 조회
+		$.ajax({
+			url: "../getProductImg",
+			type: "post",
+			data: JSON.stringify({prod_id: prod_id}), //JSON데이터 -> {키:값}
+			contentType: "application/json", //보내는 데이터타입
+			success: function(result) {
+				console.log(result); //반환된 데이터
+				
+				var str = "";
+				var arr = ['a', 'b', 'c'];
+				for(var i = 0; i < result.length; i++) {
+					str += '<div class="left">'
+					str += '<span>추가이미지</span>'
+					str += '<label class="upload-display" for="'+ arr[i] +'_file">'
+					str += '<span class="upload-thumb-wrap">'
+					str += '<img class="upload-thumb" src="'+ '../display/'+ result[i].filepath + '/' + result[i].uuid + '/' + result[i].filename +'">'
+					str += '</span>'
+					str += '</label>'
+					str += '<input class="upload-name" value="파일선택" disabled="disabled">'
+					str += '<input type="file" name="file" id="'+ arr[i] +'_file" class="upload-hidden">'
+					str += '<input type="hidden" value="">'
+					str += '<input type="hidden" value="">'
+					str += '<button type="button" class="normal_btn" style="display: block;">삭제</button>'
+					str += '<a href="'+ '../download/'+ result[i].filepath + '/' + result[i].uuid + '/' + result[i].filename +'" class="normal_btn" style="display: block;">다운로드</button>'
+					str += '</div>';
+					}
+				
+				
+				$(".filebox").html(str);
+				
+				
+			},
+			error: function() {
+				alert("이미지 조회에 실패했습니다");
+			}
+		});
+		
+		
+		modalOn();
+	});
+
+
 </script>
