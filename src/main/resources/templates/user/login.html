@@ -8,6 +8,8 @@
 
   <link rel="stylesheet" href="../css/index.css" >
   <link rel="stylesheet" href="../css/login.css" >
+  <script src="../js/jquery-1.12.1.min.js"></script>
+  
   
 </head>
 <body>
@@ -40,6 +42,19 @@
   
     </div>
   </div>
+
+
+	<script>
+	
+		$(".kakaoBtn").click(function() {
+			
+			
+			location.href="https://kauth.kakao.com/oauth/authorize?client_id=21ef6c5263279db8c7e0cb51948565dd&redirect_uri=http://127.0.0.1:8484/user/kakao&response_type=code"
+		})
+	
+	</script>
+
+
 
 </body>
 </html>

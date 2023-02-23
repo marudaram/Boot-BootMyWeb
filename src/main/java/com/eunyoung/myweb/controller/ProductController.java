@@ -48,7 +48,7 @@ public class ProductController {
 		
 		//프로세스
 		//사용할 데이터가 없어서 admin이라고 가정
-		session.setAttribute("user_id", "admin"); //user_id라는 이름으로 admin을 넣음
+		//session.setAttribute("user_id", "admin"); //user_id라는 이름으로 admin을 넣음
 		
 		//로그인한 회원만 조회
 		

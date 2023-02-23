@@ -133,5 +133,34 @@
 
 
 </body>
+
+<script th:inline="javascript">
+	
+	/*
+	메뉴 선택 유지
+	sub_menu에 display:block
+	sub_menu > a링크에 on클래스
+	sub_menu_toggle > a링크에 sun_menu_select클래스
+	*/
+	
+	var menu = JSON.parse('[[${uri}]]') //postHandler에서 보내주는 uri
+	
+	$(".sub_menu a").each(function(index, item) {
+		//console.log(index, item)
+		//console.log($(item))
+		
+		//href에 uri값이 들어있는지 확인
+		if($(item).attr("href").includes(menu)) {
+			$(item).addClass("on"); //a태그에 on클래스 추가
+			$(item).closest(".sub_menu").css("display", "block");
+			$(item).closest("sub_menu").prev().addClass("sun_menu_select");
+		}
+		
+	})
+	
+</script>
+
 </th:block>
+
+
 </html>
